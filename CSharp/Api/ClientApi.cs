@@ -33,7 +33,7 @@ namespace ClientApi
                     new JsonConverter[]
                     {
                         new StringEnumConverter(),
-                        new IsoDateTimeConverter(),
+                        new UnixDateTimeConverter(), 
                         new DecimalConverter()
                     }
             };
@@ -280,7 +280,7 @@ namespace ClientApi
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return UnixStartTime.AddSeconds((int)Convert.ChangeType(existingValue, typeof(int)));
+            return UnixStartTime.AddSeconds((int)Convert.ChangeType(reader.Value, typeof(int)));
         }
     }
 
