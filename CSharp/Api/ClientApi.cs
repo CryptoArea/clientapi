@@ -42,15 +42,15 @@ namespace ClientApi
         private T SendRequest<T>(string command, object parametersObject)
         {
             var parameters = parametersObject.GetType()
-                                             .GetProperties()
-                                             .Select(
-                                                 pi =>
-                                                 new KeyValuePair<string, string>(pi.Name,
-                                                                                  (string)
-                                                                                  Convert.ChangeType(
-                                                                                      pi.GetValue(parametersObject, null) ??
-                                                                                      "", typeof (string))))
-                                             .Where(p => !string.IsNullOrEmpty(p.Value));
+                .GetProperties()
+                .Select(
+                    pi =>
+                        new KeyValuePair<string, string>(pi.Name,
+                            (string)
+                                Convert.ChangeType(
+                                    pi.GetValue(parametersObject, null) ??
+                                    "", typeof (string), CultureInfo.InvariantCulture)))
+                .Where(p => !string.IsNullOrEmpty(p.Value));
 
             var request = new StringBuilder(address);
             request.Append(command);
@@ -85,7 +85,7 @@ namespace ClientApi
                             (string)
                                 Convert.ChangeType(
                                     pi.GetValue(parametersObject, null) ??
-                                    "", typeof (string))))
+                                    "", typeof (string), CultureInfo.InvariantCulture)))
                 .Where(p => !string.IsNullOrEmpty(p.Value))
                 .Concat(new[] {numberParameter, keyIdParameter});
 
